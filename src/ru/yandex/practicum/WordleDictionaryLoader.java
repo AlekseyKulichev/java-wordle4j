@@ -14,14 +14,14 @@ public class WordleDictionaryLoader {
 
     public WordleDictionaryLoader(PrintWriter log) {
         if (log == null) {
-            throw new IllegalArgumentException("Журнал обязателен");
+            throw new InvalidDictionaryException("Журнал обязателен");
         }
         this.log = log;
     }
 
     public WordleDictionary loadFromFile(String filePath) throws IOException {
-        if (filePath == null || filePath.trim().isEmpty()) {
-            throw new IllegalArgumentException("Путь к файлу не может быть пустым");
+        if (filePath == null || filePath.isBlank()) {
+            throw new InvalidDictionaryException("Путь к файлу не может быть пустым");
         }
 
         List<String> words = new ArrayList<>();
@@ -32,10 +32,10 @@ public class WordleDictionaryLoader {
             }
         }
 
-        WordleDictionary dictionary = new WordleDictionary(words, log);
-        if (dictionary.size() == 0) {
-            throw new IllegalStateException("В файле не найдено слов из 5 русских букв");
+        if (words.isEmpty()) {
+            throw new InvalidDictionaryException("В файле не найдено слов из 5 русских букв");
         }
-        return dictionary;
+
+        return new WordleDictionary(words, log);
     }
 }

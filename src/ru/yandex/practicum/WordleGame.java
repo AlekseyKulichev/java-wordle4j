@@ -30,11 +30,11 @@ public class WordleGame {
 
     public WordleGame(WordleDictionary dictionary, String answer, PrintWriter log) {
         if (dictionary == null || log == null) {
-            throw new IllegalArgumentException("Словарь и журнал обязательны");
+            throw new InvalidGameStateException("Словарь и журнал обязательны");
         }
         String normalizedAnswer = WordleDictionary.normalizeWord(answer);
         if (!dictionary.contains(normalizedAnswer)) {
-            throw new IllegalArgumentException("Ответ отсутствует в словаре");
+            throw new InvalidGameStateException("Ответ отсутствует в словаре");
         }
 
         this.dictionary = dictionary;
@@ -44,7 +44,7 @@ public class WordleGame {
 
     public String makeMoveAndGetHint(String guess) throws InvalidWordException {
         if (isGameOver()) {
-            throw new IllegalStateException("Игра уже завершена");
+            throw new InvalidGameStateException("Игра уже завершена");
         }
         String normalized = WordleDictionary.normalizeWord(guess);
         if (normalized.length() != WORD_LENGTH) {
@@ -84,7 +84,7 @@ public class WordleGame {
         }
 
         if (candidates.isEmpty()) {
-            throw new IllegalStateException("Не найдено подходящих слов для подсказки");
+            throw new InvalidGameStateException("Не найдено подходящих слов для подсказки");
         }
         String suggestion = candidates.get(random.nextInt(candidates.size()));
         suggestedWords.add(suggestion);
@@ -109,7 +109,7 @@ public class WordleGame {
 
     private static String chooseAnswer(WordleDictionary dictionary) {
         if (dictionary == null) {
-            throw new IllegalArgumentException("Словарь обязателен");
+            throw new InvalidGameStateException("Словарь обязателен");
         }
         return dictionary.getRandomWord();
     }
@@ -118,7 +118,7 @@ public class WordleGame {
         String normalizedGuess = WordleDictionary.normalizeWord(guess);
         String normalizedAnswer = WordleDictionary.normalizeWord(answer);
         if (normalizedGuess.length() != WORD_LENGTH || normalizedAnswer.length() != WORD_LENGTH) {
-            throw new IllegalArgumentException("Оба слова должны содержать 5 русских букв");
+            throw new InvalidGameStateException("Оба слова должны содержать 5 русских букв");
         }
 
         char[] hint = new char[WORD_LENGTH];

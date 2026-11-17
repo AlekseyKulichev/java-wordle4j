@@ -1,6 +1,5 @@
 package ru.yandex.practicum;
 
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +14,7 @@ public class Wordle {
     public static void main(String[] args) {
         try (PrintWriter log = new PrintWriter(new OutputStreamWriter(
                 Files.newOutputStream(Path.of(LOG_FILE)), StandardCharsets.UTF_8))) {
-            run(new Scanner(System.in, StandardCharsets.UTF_8.name()), log);
+            run(new Scanner(System.in, StandardCharsets.UTF_8), log);
         } catch (Exception e) {
             System.err.println("Не удалось создать файл журнала: " + e.getMessage());
         }
@@ -33,7 +32,7 @@ public class Wordle {
                 System.out.print("> ");
                 String input = scanner.nextLine();
 
-                if (input.trim().isEmpty()) {
+                if (input.isBlank()) {
                     String suggestion = game.suggestWord();
                     System.out.println("Подсказка: " + suggestion);
                     log.println("Подсказка: " + suggestion);

@@ -2,7 +2,6 @@ package ru.yandex.practicum;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -13,9 +12,10 @@ public class WordleDictionary {
     private static final int WORD_LENGTH = 5;
 
     private final Set<String> words = new LinkedHashSet<>();
+
     public WordleDictionary(List<String> sourceWords, PrintWriter log) {
         if (sourceWords == null || log == null) {
-            throw new IllegalArgumentException("Слова и журнал обязательны");
+            throw new InvalidDictionaryException("Слова и журнал обязательны");
         }
         for (String word : sourceWords) {
             addWord(word);
@@ -49,7 +49,7 @@ public class WordleDictionary {
     }
 
     public List<String> getWords() {
-        return Collections.unmodifiableList(new ArrayList<>(words));
+        return List.copyOf(words);
     }
 
     public int size() {
@@ -58,7 +58,7 @@ public class WordleDictionary {
 
     public String getRandomWord() {
         if (words.isEmpty()) {
-            throw new IllegalStateException("Словарь пуст");
+            throw new InvalidDictionaryException("Словарь пуст");
         }
         List<String> wordList = new ArrayList<>(words);
         return wordList.get(new Random().nextInt(wordList.size()));
